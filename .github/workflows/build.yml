@@ -1,0 +1,41 @@
+name: Build
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "00 03 * * *"
+  push:
+    branches:
+      - main
+    paths-ignore: 
+      - "**/README.md" 
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+  
+    steps:
+      - name: Prepare Workstation
+        shell: bash
+        run: |
+          git config --global init.defaultBranch main
+          mkdir -p ./publish
+
+      - name: Get Upstream
+        run: |
+          curl -L https://raw.githubusercontent.com/gaoyifan/china-operator-ip/ip-lists/china.txt -o china.txt
+          curl -L https://raw.githubusercontent.com/gaoyifan/china-operator-ip/ip-lists/chin6.txt -o china6.txt
+          cat china.txt china6.txt > publish/ip.txt
+
+      - name: Git push assets to "release" branch
+        run: |
+          cd publish || exit 1
+          git init
+          git config --local user.name "github-actions"
+          git config --local user.email "github-actions@github.com"
+          git checkout -b release
+          git add --all
+          git commit -m "sync"
+          git remote add china-ip-list "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
+          git push -f china-ip-list release
