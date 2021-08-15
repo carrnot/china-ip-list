@@ -25,7 +25,7 @@ jobs:
       - name: Get Upstream
         run: |
           curl -L https://raw.githubusercontent.com/gaoyifan/china-operator-ip/ip-lists/china.txt -o china.txt
-          curl -L https://raw.githubusercontent.com/gaoyifan/china-operator-ip/ip-lists/chin6.txt -o china6.txt
+          curl -L https://raw.githubusercontent.com/gaoyifan/china-operator-ip/ip-lists/china6.txt -o china6.txt
           cat china.txt china6.txt > publish/ip.txt
 
       - name: Git push assets to "release" branch
