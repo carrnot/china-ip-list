@@ -26,13 +26,15 @@ jobs:
         run: |
           curl -L https://raw.githubusercontent.com/gaoyifan/china-operator-ip/ip-lists/china.txt -o china.txt
           curl -L https://raw.githubusercontent.com/gaoyifan/china-operator-ip/ip-lists/china6.txt -o china6.txt
-          cat china.txt china6.txt > publish/ip.txt
+          curl -L https://raw.githubusercontent.com/gaoyifan/china-operator-ip/ip-lists/googlecn.txt -o googlecn.txt
+          curl -L https://raw.githubusercontent.com/gaoyifan/china-operator-ip/ip-lists/googlecn6.txt -o googlecn6.txt
+          cat china.txt china6.txt googlecn.txt googlecn6.txt > publish/ip.txt
 
       - name: Git push assets to "release" branch
         run: |
           cd publish || exit 1
           git init
-          git config --local user.name "github-actions"
+          git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions@github.com"
           git checkout -b release
           git add --all
