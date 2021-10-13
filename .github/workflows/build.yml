@@ -20,16 +20,29 @@ jobs:
         shell: bash
         run: |
           git config --global init.defaultBranch main
+          
+          wget `curl -s https://api.github.com/repos/zhanhb/cidr-merger/releases/latest | grep -Po '(?<=download_url\"\: \").*linux-amd64'`
+          mv ./cidr-merger-linux-amd64 ./cidr-merger
+          chmod +x ./cidr-merger
+          
           mkdir -p ./publish
 
       - name: Get Upstream
         run: |
-          curl -L https://raw.githubusercontent.com/gaoyifan/china-operator-ip/ip-lists/china.txt -o china.txt
-          curl -L https://raw.githubusercontent.com/gaoyifan/china-operator-ip/ip-lists/china6.txt -o china6.txt
-          curl -L https://raw.githubusercontent.com/gaoyifan/china-operator-ip/ip-lists/googlecn.txt -o googlecn.txt
-          curl -L https://raw.githubusercontent.com/gaoyifan/china-operator-ip/ip-lists/googlecn6.txt -o googlecn6.txt
-          cat china.txt china6.txt googlecn.txt googlecn6.txt > publish/ip.txt
-
+          curl -L https://raw.githubusercontent.com/gaoyifan/china-operator-ip/ip-lists/china.txt -o ipv4-china.txt
+          curl -L https://raw.githubusercontent.com/gaoyifan/china-operator-ip/ip-lists/googlecn.txt -o ipv4-googlecn.txt
+          curl 'http://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest' | grep ipv4 | grep CN | awk -F\| '{ printf("%s/%d\n", $4, 32-log($5)/log(2)) }' > ipv4-apnic.txt
+          
+          cat ./ipv4*.txt | ./cidr-merger -s > ./ipv4.txt
+          
+          curl -L https://raw.githubusercontent.com/gaoyifan/china-operator-ip/ip-lists/china6.txt -o ipv6-china6.txt
+          curl -L https://raw.githubusercontent.com/gaoyifan/china-operator-ip/ip-lists/googlecn6.txt -o ipv6-googlecn6.txt
+          curl 'http://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest' | grep ipv6 | grep CN | awk -F\| '{ printf("%s/%d\n", $4, 32-log($5)/log(2)) }' > ipv6-apnic.txt
+          
+          cat ./ipv6*.txt | ./cidr-merger -s > ./ipv6.txt
+          
+          cat ipv4.txt ipv6.txt > publish/ip.txt
+          
       - name: Git push assets to "release" branch
         run: |
           cd publish || exit 1
