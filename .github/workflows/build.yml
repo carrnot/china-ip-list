@@ -30,6 +30,7 @@ jobs:
       - name: Get Upstream
         run: |
           curl -L https://raw.githubusercontent.com/gaoyifan/china-operator-ip/ip-lists/china.txt -o ipv4-china.txt
+          curl -L https://raw.githubusercontent.com/17mon/china_ip_list/master/china_ip_list.txt -o ipv4-china_ip_list.txt
           curl -L https://raw.githubusercontent.com/gaoyifan/china-operator-ip/ip-lists/googlecn.txt -o ipv4-googlecn.txt
           curl 'http://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest' | grep ipv4 | grep CN | awk -F\| '{ printf("%s/%d\n", $4, 32-log($5)/log(2)) }' > ipv4-apnic.txt
           
