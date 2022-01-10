@@ -29,6 +29,7 @@ jobs:
 
       - name: Get Upstream
         run: |
+          curl -L https://ispip.clang.cn/all_cn_cidr.txt -o ipv4-all_cn_cidr.txt
           curl -L https://raw.githubusercontent.com/metowolf/iplist/master/data/special/china.txt -o ipv4-metowolf.txt
           curl -L https://raw.githubusercontent.com/gaoyifan/china-operator-ip/ip-lists/china.txt -o ipv4-china.txt
           curl -L https://raw.githubusercontent.com/17mon/china_ip_list/master/china_ip_list.txt -o ipv4-china_ip_list.txt
@@ -37,6 +38,7 @@ jobs:
           
           cat ./ipv4*.txt | ./cidr-merger -s > ./ipv4.txt
           
+          curl -L https://ispip.clang.cn/all_cn_ipv6.txt -o ipv6-all_cn_ipv6.txt
           curl -L https://raw.githubusercontent.com/gaoyifan/china-operator-ip/ip-lists/china6.txt -o ipv6-china6.txt
           curl -L https://raw.githubusercontent.com/gaoyifan/china-operator-ip/ip-lists/googlecn6.txt -o ipv6-googlecn6.txt
           curl 'http://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest' | grep ipv6 | grep CN | awk -F\| '{ printf("%s/%d\n", $4, 32-log($5)/log(2)) }' > ipv6-apnic.txt
