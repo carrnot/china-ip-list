@@ -46,7 +46,9 @@ jobs:
           
           cat ./ipv6*.txt | ./cidr-merger -s > ./ipv6.txt
           
-          cat ipv4.txt ipv6.txt > publish/ip.txt
+          curl -L https://raw.githubusercontent.com/v2fly/geoip/release/text/cn.txt -o maxmind-cn.txt
+          
+          cat ipv4.txt ipv6.txt maxmind-cn.txt | ./cidr-merger -s > publish/ip.txt
           
       - name: Git push assets to "release" branch
         run: |
