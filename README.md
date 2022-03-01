@@ -1,6 +1,6 @@
 # China IP List
 
-[https://raw.githubusercontent.com/hidns/china-ip-list/release/ip.txt](https://raw.githubusercontent.com/hidns/china-ip-list/release/ip.txt)
+[https://raw.githubusercontent.com/carrnot/china-ip-list/release/ip.txt](https://raw.githubusercontent.com/carrnot/china-ip-list/release/ip.txt)
 
 
 ## Credits
