@@ -48,7 +48,11 @@ jobs:
           
           curl -L https://raw.githubusercontent.com/v2fly/geoip/release/text/cn.txt -o maxmind-cn.txt
           
+          # base file
           cat ipv4.txt ipv6.txt maxmind-cn.txt | ./cidr-merger -s > publish/ip.txt
+          
+          # shadowsocket
+          sed 's/^/IP\-CIDR\,/' publish/ip.txt > publish/rocket.txt
           
       - name: Git push assets to "release" branch
         run: |
