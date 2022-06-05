@@ -46,14 +46,53 @@ jobs:
           
           cat ./ipv6*.txt | ./cidr-merger -s > ./ipv6.txt
           
-          curl -L https://raw.githubusercontent.com/v2fly/geoip/release/text/cn.txt -o maxmind-cn.txt
+          curl -L https://raw.githubusercontent.com/v2fly/geoip/release/text/cn.txt -o maxmind-cn.txt          
           
-          # base file
+      - name: Create Basefile
+        run: |
           cat ipv4.txt ipv6.txt maxmind-cn.txt | ./cidr-merger -s > publish/ip.txt
-          
-          # shadowsocket
+
+      - name: Create shadowsocket
+        run: |
           sed 's/^/IP\-CIDR\,/' publish/ip.txt > publish/rocket.txt
-          
+
+      - name: Create shadowsocks acl
+        run: |
+          export ssacl="publish/china-ip.acl"
+
+          echo [proxy_all] >> $ssacl
+          echo >> $ssacl
+          echo [bypass_list] >> $ssacl
+          echo 10.0.0.0/8 >> $ssacl
+          echo 100.64.0.0/10 >> $ssacl
+          echo 127.0.0.0/8 >> $ssacl
+          echo 169.254.0.0/16 >> $ssacl
+          echo 172.16.0.0/12 >> $ssacl
+          echo 192.0.0.0/24 >> $ssacl
+          echo 192.0.2.0/24 >> $ssacl
+          echo 192.88.99.0/24 >> $ssacl
+          echo 192.168.0.0/16 >> $ssacl
+          echo 198.18.0.0/15 >> $ssacl
+          echo 198.51.100.0/24 >> $ssacl
+          echo 203.0.113.0/24 >> $ssacl
+          echo 224.0.0.0/4 >> $ssacl
+          echo 240.0.0.0/4 >> $ssacl
+          echo 255.255.255.255/32 >> $ssacl
+          echo ::1/128 >> $ssacl
+          echo fc00::/7 >> $ssacl
+          echo fe80::/10 >> $ssacl
+          echo 17.249.0.0/16 >> $ssacl
+          echo 17.252.0.0/16 >> $ssacl
+          echo 17.57.144.0/22 >> $ssacl
+          echo 17.188.128.0/18 >> $ssacl
+          echo 17.188.20.0/23 >> $ssacl
+          echo 2620:149:a44::/48 >> $ssacl
+          echo 2403:300:a42::/48 >> $ssacl
+          echo 2403:300:a51::/48 >> $ssacl
+          echo 2a01:b740:a42::/48 >> $ssacl
+
+          cat publish/ip.txt >> $ssacl
+
       - name: Git push assets to "release" branch
         run: |
           cd publish || exit 1
