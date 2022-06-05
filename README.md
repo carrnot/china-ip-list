@@ -2,6 +2,8 @@
 
 [https://raw.githubusercontent.com/carrnot/china-ip-list/release/ip.txt](https://raw.githubusercontent.com/carrnot/china-ip-list/release/ip.txt)
 
+* shadowrocket: [https://raw.githubusercontent.com/carrnot/china-ip-list/release/rocket.txt](https://raw.githubusercontent.com/carrnot/china-ip-list/release/rocket.txt)
+* shadowsocks ACL: [https://raw.githubusercontent.com/carrnot/china-ip-list/release/china-ip.acl](https://raw.githubusercontent.com/carrnot/china-ip-list/release/china-ip.acl)
 
 ## Credits
 
