@@ -25,6 +25,8 @@ jobs:
           mv ./cidr-merger-linux-amd64 ./cidr-merger
           chmod +x ./cidr-merger
           
+          apt -y install gzip
+          
           mkdir -p ./publish
 
       - name: Get Upstream
@@ -38,19 +40,28 @@ jobs:
           curl -L https://raw.githubusercontent.com/gaoyifan/china-operator-ip/ip-lists/googlecn.txt -o ipv4-googlecn.txt
           curl 'http://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest' | grep ipv4 | grep CN | awk -F\| '{ printf("%s/%d\n", $4, 32-log($5)/log(2)) }' > ipv4-apnic.txt
           
+          # get ipv4 data
           cat ./ipv4*.txt | ./cidr-merger -s > ./ipv4.txt
           
           curl -L https://raw.githubusercontent.com/gaoyifan/china-operator-ip/ip-lists/china6.txt -o ipv6-china6.txt
           curl -L https://raw.githubusercontent.com/gaoyifan/china-operator-ip/ip-lists/googlecn6.txt -o ipv6-googlecn6.txt
           curl 'http://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest' | grep ipv6 | grep CN | awk -F\| '{ printf("%s/%d\n", $4, 32-log($5)/log(2)) }' > ipv6-apnic.txt
           
+          # get ipv6 data
           cat ./ipv6*.txt | ./cidr-merger -s > ./ipv6.txt
           
-          curl -L https://raw.githubusercontent.com/v2fly/geoip/release/text/cn.txt -o maxmind-cn.txt          
+          # get maxmind data 
+          curl -L https://raw.githubusercontent.com/v2fly/geoip/release/text/cn.txt -o maxmind-cn.txt
+          
+          # get db-ip data
+          export curdate=$(date +%Y-%m)
+          curl -L "https://download.db-ip.com/free/dbip-country-lite-$curdate.csv.gz" -o dbip.gz
+          gzip -d dbip.gz
+          cat dbip | grep "CN" | sed 's/...$//' | sed 's/\,/\-/g' | ./cidr-merger -s > dbip.txt
           
       - name: Create Basefile
         run: |
-          cat ipv4.txt ipv6.txt maxmind-cn.txt | ./cidr-merger -s > publish/ip.txt
+          cat ipv4.txt ipv6.txt maxmind-cn.txt dbip.txt | ./cidr-merger -s > publish/ip.txt
 
       - name: Create shadowsocket
         run: |
