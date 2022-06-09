@@ -13,3 +13,4 @@
 * [github.com/metowolf/iplist](https://github.com/metowolf/iplist#%E5%A4%A7%E9%99%86-ip-%E6%AE%B5)
 * [github.com/misakaio/chnroutes2](https://github.com/misakaio/chnroutes2)
 * [MaxMind(from V2Fly)](https://raw.githubusercontent.com/v2fly/geoip/release/text/cn.txt)
+* [DB-IP](https://db-ip.com)
