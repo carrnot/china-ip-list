@@ -41,7 +41,7 @@ jobs:
           
           curl -L https://raw.githubusercontent.com/gaoyifan/china-operator-ip/ip-lists/china6.txt -o ipv6-china6.txt
           curl -L https://raw.githubusercontent.com/gaoyifan/china-operator-ip/ip-lists/googlecn6.txt -o ipv6-googlecn6.txt
-          curl 'http://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest' | grep ipv6 | grep CN | awk -F\| '{ printf("%s/%d\n", $4, 32-log($5)/log(2)) }' > ipv6-apnic.txt
+          curl 'http://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest' | grep '|CN|ipv6|' | cut -d'|' -f'4,5' | tr '|' '/' > ipv6-apnic.txt
           
           # get ipv6 data
           cat ./ipv6*.txt | ./cidr-merger -s > ./ipv6.txt
