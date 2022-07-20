@@ -62,7 +62,12 @@ jobs:
       - name: Create shadowsocket
         run: |
           sed 's/^/IP\-CIDR\,/' publish/ip.txt > publish/rocket.txt
-
+          
+      - name: Create surge
+        run: |
+          cat publish/ip.txt | grep -v "::/" | sed 's/^/IP\-CIDR\,/' > publish/surge.txt
+          cat publish/ip.txt | grep "::/" | sed 's/^/IP\-CIDR\,/' >> publish/surge.txt
+  
       - name: Create shadowsocks acl
         run: |
           export ssacl="publish/china-ip.acl"
