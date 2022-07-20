@@ -66,7 +66,7 @@ jobs:
       - name: Create surge
         run: |
           cat publish/ip.txt | grep -v "::/" | sed 's/^/IP\-CIDR\,/' > publish/surge.txt
-          cat publish/ip.txt | grep "::/" | sed 's/^/IP\-CIDR\,/' >> publish/surge.txt
+          cat publish/ip.txt | grep "::/" | sed 's/^/IP\-CIDR6\,/' >> publish/surge.txt
   
       - name: Create shadowsocks acl
         run: |
